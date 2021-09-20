@@ -14,6 +14,11 @@ if(is_logined() === false){
 $db = get_db_connect();
 $user = get_login_user($db);
 
+$token = get_post('token');
+if (is_valid_csrf_token($token) !== TRUE) {
+  set_error("不正な操作が行われました。");
+  redirect_to(HOME_URL);
+}
 
 $item_id = get_post('item_id');
 
