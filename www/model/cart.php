@@ -157,3 +157,29 @@ function validate_cart_purchase($carts){
   return true;
 }
 
+function insert_history($db, $user_id, $sum) {
+  $sql = '
+    INSERT INTO
+      histories(
+        user_id,
+        sum
+      )
+    VALUES(?, ?)';
+
+  return execute_query($db, $sql, [$user_id, $sum]);
+}
+
+function insert_order($db, $order_id, $item_id, $amount, $price) {
+  $sql = '
+    INSERT INTO
+      orders(
+        order_id,
+        item_id,
+        amount,
+        price
+      )
+    VALUES(?, ?, ?, ?)
+  ';
+
+  return execute_query($db, $sql, [$order_id, $item_id, $amount, $price]);
+}
