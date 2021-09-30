@@ -109,7 +109,7 @@ function purchase_carts($db, $carts){
   $db->beginTransaction();
   try {
     $sum = sum_carts($carts);
-    if(insert_history($db, $carts['user_id'], $sum) === false) {
+    if(insert_history($db, $carts[0]['user_id'], $sum) === false) {
       set_error('データベース操作中にエラーが発生しました。');
     }
 
