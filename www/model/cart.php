@@ -105,14 +105,32 @@ function purchase_carts($db, $carts){
   if(validate_cart_purchase($carts) === false){
     return false;
   }
-  foreach($carts as $cart){
-    if(update_item_stock(
-        $db, 
-        $cart['item_id'], 
-        $cart['stock'] - $cart['amount']
-      ) === false){
-      set_error($cart['name'] . 'の購入に失敗しました。');
+
+  $db->beginTransaction();
+  try {
+    $sum = sum_carts($carts);
+    if(insert_history($db, $carts['user_id'], $sum) === false) {
+      set_error('データベース操作中にエラーが発生しました。');
     }
+
+    $order_id = $db->lastInsertId();
+    foreach($carts as $cart){
+      if(update_item_stock(
+          $db, 
+          $cart['item_id'], 
+          $cart['stock'] - $cart['amount']
+        ) === false){
+        set_error($cart['name'] . 'の購入に失敗しました。');
+      }
+      if(insert_order($db, $order_id, $cart['item_id'], $cart['amount'], $cart['price']) === false) {
+        set_error('データベース操作中にエラーが発生しました。');
+      }
+    }
+
+    $db->commit();
+  } catch (PDOException $e) {
+    $db->rollback();
+    throw $e;
   }
   
   delete_user_carts($db, $carts[0]['user_id']);
