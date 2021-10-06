@@ -21,5 +21,9 @@ if (is_valid_csrf_token($token) !== TRUE) {
 
 $order_id = get_post('order_id');
 $orders = get_orders($db, $order_id);
+if ($orders[0]['user_id'] !== $user['user_id']) {
+  set_error("不正な操作が行われました。");
+  redirect_to(HISTORY_URL);
+}
 
 include_once VIEW_PATH . 'order_view.php';
