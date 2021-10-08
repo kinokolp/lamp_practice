@@ -13,7 +13,7 @@ function get_histories($db, $user_id, $type) {
         histories
     ";
 
-    if ($type === 1) {
+    if ($type === USER_TYPE_ADMIN) {
         $sql .= "ORDER BY created DESC";
         return fetch_all_query($db, $sql, []);
     } else {

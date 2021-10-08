@@ -11,10 +11,10 @@
   <div class="container">
     <h1>購入明細</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
-    <p>注文番号：<?php print h($orders[0]['order_id']);?></p>
-    <p>注文日時：<?php print h($orders[0]['created']);?></p>
-    <p>合計金額：<?php print number_format(h($orders[0]['sum']));?>円</p>
     <?php if(count($orders) > 0){ ?>
+      <p>注文番号：<?php print h($orders[0]['order_id']);?></p>
+      <p>注文日時：<?php print h($orders[0]['created']);?></p>
+      <p>合計金額：<?php print number_format(h($orders[0]['sum']));?>円</p>
       <table class="table table-bordered">
         <thead class="thead-light">
           <tr>

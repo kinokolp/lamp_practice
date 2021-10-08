@@ -2,7 +2,8 @@
 require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'db.php';
 
-function get_orders($db, $order_id) {
+function get_orders($db, $order_id, $user_id = null) {
+    $params = [$order_id];
 
     $sql = "
     SELECT
@@ -28,6 +29,11 @@ function get_orders($db, $order_id) {
         orders.order_id = ?
     ";
 
-    return fetch_all_query($db, $sql, [$order_id]);
+    if ($user_id !== null) {
+        $sql .= "AND user_id = ?";
+        $params[] = $user_id;
+    }
+
+    return fetch_all_query($db, $sql, $params);
 }
 ?>
