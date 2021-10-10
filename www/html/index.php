@@ -17,4 +17,6 @@ $token = get_csrf_token();
 
 $items = get_open_items($db);
 
+$rankings = get_rankings($db);
+
 include_once VIEW_PATH . 'index_view.php';

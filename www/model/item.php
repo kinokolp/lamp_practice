@@ -206,3 +206,30 @@ function is_valid_item_status($status){
   }
   return $is_valid;
 }
+
+function get_rankings($db) {
+  $sql = "
+    SELECT
+      orders.item_id,
+      sum(orders.amount),
+      items.name,
+      items.price,
+      items.image
+    FROM
+      orders
+    LEFT OUTER JOIN
+      items
+    ON
+      orders.item_id = items.item_id
+    WHERE
+      items.status = ?
+    GROUP BY
+      orders.item_id
+    ORDER BY
+      sum(orders.amount) DESC
+    LIMIT
+      ?
+    ";
+
+    return fetch_all_query($db, $sql, [ITEM_STATUS_OPEN, RANKING_LIMITS]);
+  }
