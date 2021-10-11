@@ -42,6 +42,33 @@
       <?php } ?>
       </div>
     </div>
+    <br>
+    <div>
+      <h2>人気商品ランキング</h2>
+      <table class="table table-bordered">
+        <thead class="thead-light">
+          <tr>
+            <th>順位</th>
+            <th>商品画像</th>
+            <th>商品名</th>
+            <th>価格</th>
+            <th>累積販売数</th>
+          </tr>
+        </thead>
+        <tbody>
+          <? $i = 1; ?>
+        <?php foreach($rankings as $ranking) { ?>
+          <tr>
+            <td><?php print $i; ?>位</td>
+            <td><img class="item-img" src="<?php print(IMAGE_PATH . h($ranking['image'])); ?>"></td>
+            <td><?php print(h($ranking['name'])); ?></td>
+            <td><?php print(number_format(h($ranking['price']))); ?>円</td>
+            <td><?php print(h($ranking['sum(orders.amount)'])); ?>個</td>
+          </tr>
+          <?php $i++; ?>
+        <?php } ?>
+        </tbody>
+    </div>
   </div>
   
 </body>
