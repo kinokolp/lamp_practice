@@ -14,6 +14,22 @@
     <h1>商品一覧</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
 
+    <div style="padding:5px">
+      <h2>並べ替え</h2>
+      <div style="display:flex">
+        <div style="margin-left:auto">
+          <form method="get">
+            <select name="sorting">
+              <?php foreach(ITEM_SORTING as $sort_key => $sort_value) {?>
+                <option value="<?php print $sort_key; ?>" <?php if($sorting === $sort_key) { print "selected"; } ?>><?php print $sort_value; ?></option>
+              <?php } ?>
+            </select>
+            <input type="submit" value="並べ替え">
+          </form>
+        </div>
+      </div>
+    </div>
+
     <div class="card-deck">
       <div class="row">
       <?php foreach($items as $item){ ?>

@@ -22,7 +22,7 @@ function get_item($db, $item_id){
   return fetch_query($db, $sql, [$item_id]);
 }
 
-function get_items($db, $is_open = false){
+function get_items($db, $is_open = false, $column_key = "created", $order = "DESC"){
   $sql = '
     SELECT
       item_id, 
@@ -30,16 +30,17 @@ function get_items($db, $is_open = false){
       stock,
       price,
       image,
-      status
+      status,
+      created
     FROM
       items
   ';
   if($is_open === true){
     $sql .= '
-      WHERE status = 1
+    WHERE status = 1
     ';
   }
-
+  $sql .= ' ORDER BY ' . h($column_key) . ' ' . $order;
   return fetch_all_query($db, $sql);
 }
 
@@ -47,8 +48,8 @@ function get_all_items($db){
   return get_items($db);
 }
 
-function get_open_items($db){
-  return get_items($db, true);
+function get_open_items($db, $column_key = "created", $order = "DESC"){
+  return get_items($db, true, $column_key, $order);
 }
 
 function regist_item($db, $name, $price, $stock, $status, $image){
@@ -231,5 +232,37 @@ function get_rankings($db) {
       ?
     ";
 
-    return fetch_all_query($db, $sql, [ITEM_STATUS_OPEN, RANKING_LIMITS]);
+  return fetch_all_query($db, $sql, [ITEM_STATUS_OPEN, RANKING_LIMITS]);
+}
+
+function get_sort_order($sort) {
+  switch($sort) {
+    case 'new':
+      return ['created', 'DESC'];
+    case 'expensive':
+      return ['price', 'DESC'];
+    case 'inexpensive':
+      return ['price', 'ASC'];
+    default:
+      return ['created', 'DESC'];
   }
+}
+
+function get_sorting(){
+  if(isset($_GET['sorting']) === true){
+    return $_GET['sorting'];
+  } else if (isset($_SESSION['SORTING']) === true) {
+    return $_SESSION['SORTING'];
+  }
+  return DEFAULT_SORTING;
+}
+
+//配列で並べ替える用（未使用）
+function sort_items($items, $column_key, $order) {
+  $keys = [];
+  $keys = array_column($items, $column_key);
+
+  array_multisort($keys, $order, $items);
+
+  return $items;
+}

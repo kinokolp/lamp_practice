@@ -15,7 +15,11 @@ $user = get_login_user($db);
 
 $token = get_csrf_token();
 
-$items = get_open_items($db);
+$sorting = get_sorting();
+$sort_order = get_sort_order($sorting);
+$items = get_open_items($db, $sort_order[0], $sort_order[1]);
+//$items = sort_items($items, $sort_order[0], $sort_order[1]);
+set_session('SORTING', $sorting);
 
 $rankings = get_rankings($db);
 

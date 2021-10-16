@@ -53,3 +53,11 @@ define('PERMITTED_IMAGE_TYPES', array(
 ));
 
 define('RANKING_LIMITS', 3);
+
+define('ITEM_SORTING', array(
+  'new' => '新着順',
+  'expensive' => '価格の高い順',
+  'inexpensive' => '価格の安い順'
+));
+
+define('DEFAULT_SORTING', 'new');

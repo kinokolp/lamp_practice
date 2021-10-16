@@ -156,3 +156,13 @@ function is_valid_csrf_token($token){
   // get_session()はユーザー定義関数
   return $token === get_session('csrf_token');
 }
+
+function is_request_get() {
+  if (isset($_SERVER['REQUEST_METHOD'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      return true;
+    }
+  }
+
+  return false;
+}
