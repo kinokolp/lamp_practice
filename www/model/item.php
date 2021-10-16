@@ -22,7 +22,7 @@ function get_item($db, $item_id){
   return fetch_query($db, $sql, [$item_id]);
 }
 
-function get_items($db, $is_open = false, $column_key = '', $order = ''){
+function get_items($db, $is_open = false, $column_key = "created", $order = "DESC"){
   $sql = '
     SELECT
       item_id, 
@@ -40,10 +40,7 @@ function get_items($db, $is_open = false, $column_key = '', $order = ''){
     WHERE status = 1
     ';
   }
-  if ($column_key !== '' && $order !== '') {
-    $sql .= 'ORDER BY ' . h($column_key) . ' ' . $order;
-  }
-
+  $sql .= ' ORDER BY ' . h($column_key) . ' ' . $order;
   return fetch_all_query($db, $sql);
 }
 
@@ -51,7 +48,7 @@ function get_all_items($db){
   return get_items($db);
 }
 
-function get_open_items($db, $column_key = '', $order = ''){
+function get_open_items($db, $column_key = "created", $order = "DESC"){
   return get_items($db, true, $column_key, $order);
 }
 
@@ -247,8 +244,17 @@ function get_sort_order($sort) {
     case 'inexpensive':
       return ['price', 'ASC'];
     default:
-      return ['created', 'ASC'];
+      return ['created', 'DESC'];
   }
+}
+
+function get_sorting(){
+  if(isset($_GET['sorting']) === true){
+    return $_GET['sorting'];
+  } else if (isset($_SESSION['SORTING']) === true) {
+    return $_SESSION['SORTING'];
+  }
+  return DEFAULT_SORTING;
 }
 
 //配列で並べ替える用（未使用）

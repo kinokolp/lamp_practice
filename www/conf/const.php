@@ -59,3 +59,5 @@ define('ITEM_SORTING', array(
   'expensive' => '価格の高い順',
   'inexpensive' => '価格の安い順'
 ));
+
+define('DEFAULT_SORTING', 'new');
