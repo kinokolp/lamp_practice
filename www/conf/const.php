@@ -61,3 +61,5 @@ define('ITEM_SORTING', array(
 ));
 
 define('DEFAULT_SORTING', 'new');
+
+define('PAGE_LIMIT', 8);

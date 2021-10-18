@@ -14,7 +14,7 @@
     <h1>商品一覧</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
 
-    <div style="padding:5px">
+    <div>
       <h2>並べ替え</h2>
       <div style="display:flex">
         <div style="margin-left:auto">
@@ -28,6 +28,25 @@
           </form>
         </div>
       </div>
+    </div>
+
+    <div>
+      <div>
+        <span><?php print $item_count['COUNT(*)']; ?>件中 <?php print $item_count_view[0] . " - " . $item_count_view[1] . "件目の商品";?></span>
+      </div>
+      <?php if ($now_page > 1) { ?>
+        <a href="<?php print HOME_URL . "?page_id=" . ($now_page-1); ?>">前へ</a>
+      <?php } ?>
+      <?php for($i = 1; $i <= $page_max; $i++) { ?>
+        <?php if($i === $now_page) { ?>
+          <span><?php print $i; ?></span>
+        <?php } else { ?>
+          <a href="<?php print HOME_URL . "?page_id=" . $i; ?>"><?php print $i; ?></a>
+        <?php } ?>
+      <?php } ?>
+      <?php if ($now_page < $page_max) { ?>
+        <a href="<?php print HOME_URL . "?page_id=" . ($now_page+1); ?>">次へ</a>
+      <?php } ?>
     </div>
 
     <div class="card-deck">

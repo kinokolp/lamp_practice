@@ -22,7 +22,7 @@ function get_item($db, $item_id){
   return fetch_query($db, $sql, [$item_id]);
 }
 
-function get_items($db, $is_open = false, $column_key = "created", $order = "DESC"){
+function get_items($db, $is_open = false, $column_key = "created", $order = "DESC", $now_page = 1){
   $sql = '
     SELECT
       item_id, 
@@ -39,8 +39,17 @@ function get_items($db, $is_open = false, $column_key = "created", $order = "DES
     $sql .= '
     WHERE status = 1
     ';
+    $sql .= '
+      ORDER BY '
+       . h($column_key)
+       . ' '
+       . $order;
+    $sql .= '
+      LIMIT ?, ?
+    ';
+    return fetch_all_query($db, $sql, [($now_page-1)*PAGE_LIMIT, PAGE_LIMIT]);
   }
-  $sql .= ' ORDER BY ' . h($column_key) . ' ' . $order;
+
   return fetch_all_query($db, $sql);
 }
 
@@ -48,8 +57,8 @@ function get_all_items($db){
   return get_items($db);
 }
 
-function get_open_items($db, $column_key = "created", $order = "DESC"){
-  return get_items($db, true, $column_key, $order);
+function get_open_items($db, $column_key = "created", $order = "DESC", $now_page = 1){
+  return get_items($db, true, $column_key, $order, $now_page);
 }
 
 function regist_item($db, $name, $price, $stock, $status, $image){
@@ -265,4 +274,33 @@ function sort_items($items, $column_key, $order) {
   array_multisort($keys, $order, $items);
 
   return $items;
+}
+
+function get_items_count($db) {
+  $sql = "
+    SELECT
+      COUNT(*)
+    FROM
+      items
+    WHERE
+      status = 1
+    ";
+
+  return fetch_query($db, $sql);
+}
+
+function get_now_page() {
+  if (isset($_GET['page_id'])) {
+    return (int) $_GET['page_id'];
+  } else {
+    return 1;
+  }
+}
+
+function item_count_view($now_page, $item_count) {
+  if ($now_page*PAGE_LIMIT > $item_count) {
+    return [($now_page-1)*PAGE_LIMIT+1, $item_count];
+  } else {
+    return [($now_page-1)*PAGE_LIMIT+1, $now_page*PAGE_LIMIT];
+  }
 }
