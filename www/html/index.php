@@ -18,7 +18,7 @@ $token = get_csrf_token();
 $item_count = get_items_count($db);
 $page_max = ceil($item_count['COUNT(*)'] / PAGE_LIMIT);
 $now_page = get_now_page();
-if ($now_page > $page_max) {
+if ($now_page > $page_max || $now_page <= 0) {
   set_error('表示範囲外のページにアクセスしました。トップページへ戻ります。');
   redirect_to(HOME_URL);
 }
